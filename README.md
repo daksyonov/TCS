@@ -20,9 +20,9 @@ Here I write on some theoretic concepts I was asked during interviews.
 - **Reference** is a name by which an object can be pointed to. References in Swift can be `strong`, ` weak` and `unowned`. `Strong` and `weak` are the two levels of strength. `Unowned` is the flavor of `weak`.
 - **Reference counter** - the value that increments as new references to an object are created. 
 
-**NB:** Dynamically allocated objects are represented with [`HeapObject`](https://github.com/apple/swift/blob/4fd0671e542299d7805e41cf9426640ab3b399af/stdlib/public/SwiftShims/HeapObject.h) struct, that contains (but not limited to) reference counters. Conceptually an object has three refcounters - `strong`, `weak` and `unowned`.
-
-**NB -** ARC is not a new runtime memory model / garbage collector / automation for `malloc`.
+*NB 
+Dynamically allocated objects are represented with [`HeapObject`](https://github.com/apple/swift/blob/4fd0671e542299d7805e41cf9426640ab3b399af/stdlib/public/SwiftShims/HeapObject.h) struct, that contains (but not limited to) reference counters. Conceptually an object has three refcounters - `strong`, `weak` and `unowned`.
+ARC is not a new runtime memory model / garbage collector / automation for `malloc`.*
 
 ### How ARC Works
 
@@ -231,31 +231,154 @@ autoreleasepool {
 
 `autoreleasepool` in Swift comes handy with Cocoa (Touch) classes (`UIKit` and Friends).
 
----
-
 ## What is GCD and How It Works?
+
+### References
+
+- https://habr.com/post/320152/
+- https://habr.com/post/335756/
+- http://greenteapress.com/semaphores/LittleBookOfSemaphores.pdf
+- https://stepik.org/course/3278/
+- https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i-CH1-SW1
 
 ### Prologue
 
-> By default the app works on the main thread that manages the UI. On the development cycle if some heavy operation like downloading file or scanning a large database is added - UI can freeze.
+By default the app works on the main thread that manages the UI. If some heavy operation like downloading file or scanning a large database is added - UI can freeze.
 
-### Multicore vs Single Core CPU
+Single core CPU can handle one task at a time on a thread. Thus 'concurrency' in this case is achieved by rapidly switching between the tasks. Multicore CPU can delegate it's entire core to each thread to perform some tasks. Both of these technologies use term 'concurrency'.
 
-Single core CPU can handle one task at a time on a thread. Thus 'concurrency' in this case is achieved by rapidly switching between the tasks. Multicore CPU can delegate an entire core to each thread to perform some tasks. Both of these technologies use term 'concurrency'.
+Main drawback of concurrency is risk of thread safety. This means that, say, different tasks would want to gain access to same resource (amend one variable simultaneously) or try to gain access to resources, already blocked by other tasks. Such risks can damage the resources.
 
-### Concurrency Risks
+Apple provides the developers with several instruments:
 
-Main drawback of concurrency is thread safety. This means that there are some risks inherent to the data, exposed to multithreading. Say, different tasks will want to gain access to same resource (amend one variable simultaneously) or try to gain access to resources, already blocked by other tasks. Such risks can damage the resources.
+- `Thread` - low level tool for objc method to run @ their own threads of execution 
+- `GCD` - languange, runtime and other features to provide concurrency management
+- `Operation` - abstract class that represents a task
 
-https://habr.com/post/320152/
+*NB
+Abstract class is a class that cannot be instantiated, but can be inherited from. It can contain abstract methods and properties. Abstract class `Animal`, can be developed to `class Cat: Animal` or `class Dog: Animal`.*
 
-* https://habr.com/post/335756/
+### Serial & Concurrent Queues
 
-* http://greenteapress.com/semaphores/LittleBookOfSemaphores.pdf
+- Queue - this is a queue (🤣) that is used by `closures`(FIFO pattern)
+- Task  - a single piece of work aka `closure`
 
-* https://stepik.org/course/3278/
+**Serial Queues** - iOS drags out the top task of the stack, w8s until it finihes execution and then drags out next task.
+**Concurrent Queues** - iOS drags out top task of the stack, starts it's execution on some thread and if there's a 'free power' left iOS drags out next task and executes it on some other thread while the first (in this case) task is still running. Concurrent queues can save time on tasks execution thus.
 
-* https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i-CH1-SW1
+### Synchronous & Asynchronous Task Execution
+
+Sync task execution returns control to queue only after the task has been executed, thereby locking the queue. In contrast async task execution returns control immediately after sending the task on some other queue, thereby not locking the queue.
+
+The main trick to be performed by developer is to wisely select the queue to receive tasks and to select appropriate task addition method. Everything else is handled by iOS.
+
+### Use Case: Data Download
+
+Consider the code
+
+```swift
+let imageURL: URL = URL(string: "https://imgur.com/i/8HjTE34Rs")!
+let queue = DispatchQueue.global(qos: .utility)
+
+// task sent to global queue asynchronously not to lock main queue
+
+queue.async {
+	if let data = try? Data(contentsOf: imageURL) {
+    
+    // when the image data is downloaded we asynchronously return to main queue to set the UIImage
+    
+    DispatchQueue.main.async { 
+    	self.imageView.image = UIImage(data: data)
+    }
+  }
+}
+```
+
+### iOS Queue Types
+
+**Serial Global Main Queue** handles all UI operations (`let main = DispatchQueue.main`). This queue has the highest priority amongst others.
+
+**4+ Concurrent Global Background Queues** with differentiating QoS (quality of service) and priority:
+
+1. `.userInteractive` - for tasks that interact with the user, like finger-drawing (user drags the finger / iOS calculates the curve that will be rendered). Though real implementation can show some delay, **main queue** is still listening to user's touches and reacts.
+2. `.userInitiated` - for tasks that are initiated by user and request feedback, but not in terms of interactive event; usually can take up to some seconds.
+3. `.utility` - for tasks that demand some time to execute, like data downloading or database cleaning / scanning etc; usually the user does not ask these tasks to be executed.
+4. `.background` - for tasks not connected to UI at all or not demanding to quick execution time like backups or web sync; these tasks can take hours to complete.
+5. `.default` - used when there's no info on QoS.
+
+*NB*
+*Needless to say that above listed queues (main + friends) are **system**, thus are actively used by iOS when the app is on run. Therefore user's tasks are not the sole customers of these queues.*
+
+### Main Queue
+
+The sole SERIAL global queue is **main queue**. It is discouraged to perform non-UI high-consuming tasks on this queue not to freeze the UI for the time of task execution and preserve the responsiveness of the UI.
+
+UI-related tasks can be performed only on main queue. This is enforced not only because one usually wants the UI tasks to run fluently but as well because the UI should be protected from spontaneous and desynced operation. Other words - UI's reaction on user's events should be performed strictly in serial and arranged manner. If UI-related tasks would run on concurrent queue, drawing on screen would complete with different speed and that would lead to unpredictable behaviour.
+That being said, main queue is a point of ui synchronization so to say.
+
+### Common Concurrency Problems
+
+There are three main problems:
+
+1. Race condition
+2. Priority Inversion
+3. Deadlock
+
+Race condition case:
+
+```swift
+import Dispatch
+
+// Initializing serial queue
+
+var serialQueue = DispatchQueue(label: "", qos: .userInitiated)
+var value = "😇"
+
+// Dummy method will change value
+
+func changeValue(variant: Int) {
+    
+    // sleep operator increases execution time (made intentionally)
+    
+    sleep(1)
+    
+    value = value + "🐔"
+    print("\(value) - \(variant)")
+}
+
+// Trying to change the value async
+
+serialQueue.async { // NB - changing it to 'sync' resolves the race condition
+    changeValue(variant: 1)
+}
+
+// Here the value did not made it to change in time we access it
+
+value // 😇
+
+// Here's the point where the race condition is revealed
+// The 😇 changed to 🦊 before the 🐔 was added
+// That clearly represents race conidition
+
+value = "🦊" // 🦊
+
+serialQueue.sync {
+    changeValue(variant: 2)
+}
+
+// the first opetation (variant 1) will take place presumably somewhere here
+
+value
+
+/**
+ the final output will be as follows:
+ 🦊🐔 - 1
+ 🦊🐔🐔 - 2
+ see? no 😇 here
+ */
+```
+
+
 
 ## What are Binary Trees and How They Work?
 
