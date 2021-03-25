@@ -4,27 +4,6 @@
 
 Here I write on some theoretic concepts I was asked during interviews.
 
-## Table of Contents
-- [iOS Interview Theory Questions](#ios-interview-theory-questions)
-  - [Foreword](#foreword)
-  - [What is ARC and How It Works?](#what-is-arc-and-how-it-works)
-    - [References:](#references)
-    - [What is ARC (+ Definitions)](#what-is-arc--definitions)
-    - [How ARC Works](#how-arc-works)
-    - [Strong, Weak and Unowned References](#strong-weak-and-unowned-references)
-      - [Strong](#strong)
-      - [Weak](#weak)
-      - [Unowned](#unowned)
-        - [Unowned is non-ARC 'weak' aka Obj-C 'assign' or '__unsafe_unretained'](#unowned-is-non-arc-weak-aka-obj-c-assign-or-__unsafe_unretained)
-  - [What is a Side Table?](#what-is-a-side-table)
-  - [Object Lifecycle Under ARC](#object-lifecycle-under-arc)
-    - [Shortcuts](#shortcuts)
-    - [Invariants](#invariants)
-  - [Spin-Off: What is Memory](#spin-off-what-is-memory)
-  - [What is @autoreleasepool?](#what-is-autoreleasepool)
-
----
-
 ## ARC
 
 ### References:
@@ -35,6 +14,7 @@ Here I write on some theoretic concepts I was asked during interviews.
 - https://stackoverflow.com/a/42847825/11841185
 
 ### What is ARC (+ Definitions)
+
 - **ARC (Automatic Reference Counting)** is the automatic memory management of objects that imposes conventions of managing and transferring ownership.
 - **Ownership** is the responsibility of some code to eventually deallocate the object it handles.
 - **Reference** is a name by which an object can be pointed to. References in Swift can be `strong`, ` weak` and `unowned`. `Strong` and `weak` are the two levels of strength. `Unowned` is the flavor of `weak`.
@@ -251,9 +231,21 @@ autoreleasepool {
 
 `autoreleasepool` in Swift comes handy with Cocoa (Touch) classes (`UIKit` and Friends).
 
+---
+
 ## What is GCD and How It Works?
 
-By default the app works on the main thread that manages the UI. On the development cycle if some heavy operation like downloading file or scanning a large database is added - UI can freeze.
+### Prologue
+
+> By default the app works on the main thread that manages the UI. On the development cycle if some heavy operation like downloading file or scanning a large database is added - UI can freeze.
+
+### Multicore vs Single Core CPU
+
+Single core CPU can handle one task at a time on a thread. Thus 'concurrency' in this case is achieved by rapidly switching between the tasks. Multicore CPU can delegate an entire core to each thread to perform some tasks. Both of these technologies use term 'concurrency'.
+
+### Concurrency Risks
+
+Main drawback of concurrency is thread safety. This means that there are some risks inherent to the data, exposed to multithreading. Say, different tasks will want to gain access to same resource (amend one variable simultaneously) or try to gain access to resources, already blocked by other tasks. Such risks can damage the resources.
 
 https://habr.com/post/320152/
 
