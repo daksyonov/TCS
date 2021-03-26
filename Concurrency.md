@@ -78,7 +78,9 @@ Here the output will be:
 - Download finished, 1000 images saved to persistent store!
 - The images are downloading!
 
-This is achieved because of synchronous task execution. The console will not print the second phrase until all 1000 images finish downloading and are written to the app's store.
+This is achieved because of synchronous task execution. 
+The console will not print the second phrase until all 1000 images finish 
+downloading and are written to the app's store.
 */
 
 // MARK: - Async task execution
@@ -94,11 +96,10 @@ Here the output will be:
 - The images are downloading!
 - Download finished, 1000 images saved to persistent store!
 
-This is achieved because of asynchronous task execution. The app does not wait until the 'downloadFromImgur()' finishes and returns control immediately.
+This is achieved because of asynchronous task execution.
+The app does not wait until the 'downloadFromImgur()' finishes 
+and returns control immediately.
 */
-
-
-
 ```
 
 The main trick to be performed by developer is to wisely select the queue to receive tasks and to select appropriate task addition method. Everything else is handled by iOS.
