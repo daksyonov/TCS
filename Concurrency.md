@@ -67,7 +67,7 @@ func showConsoleMessage() {
 
 // MARK: - Sync task execution
 
-DispatchQueue.global(qos: .background).sync { 
+DispatchQueue.global(qos: .utility).sync { 
 	downloadFromImgur()
 }
 
@@ -85,7 +85,7 @@ downloading and are written to the app's store.
 
 // MARK: - Async task execution
 
-DispatchQueue.global(qos: .background).async { 
+DispatchQueue.global(qos: .utility).async { 
 	downloadFromImgur()
 }
 
@@ -128,7 +128,7 @@ queue.async {
 
 ### iOS Queue Types
 
-**Serial Global Main Queue** handles all UI operations (`let main = DispatchQueue.main`). This queue has the highest priority amongst others.
+**Serial Global Main Queue** handles all UI operations (`let main = DispatchQueue.main`). This queue has the highest priority amongst others and the sole serial queue, provided by system.
 
 **4+ Concurrent Global Background Queues** with differentiating QoS (quality of service) and priority:
 
@@ -143,10 +143,10 @@ queue.async {
 
 ### Main Queue
 
-The sole SERIAL global queue is **main queue**. It is discouraged to perform non-UI high-consuming tasks on this queue not to freeze the UI for the time of task execution and preserve the responsiveness of the UI.
+The sole SERIAL global queue is **main queue**. It is discouraged to perform non-UI high consuming tasks on this queue not to freeze the UI for the time of task execution and thereby preserving UI responsiveness.
 
-UI-related tasks can be performed only on main queue. This is enforced not only because one usually wants the UI tasks to run fluently but as well because the UI should be protected from spontaneous and desynced operation. Other words - UI's reaction on user's events should be performed strictly in serial and arranged manner. If UI-related tasks would run on concurrent queue, drawing on screen would complete with different speed and that would lead to unpredictable behaviour.
-That being said, main queue is a point of ui synchronization so to say.
+UI-related tasks can be performed only on main queue. This is enforced not only because one usually wants the UI tasks to run fluently but as well because the UI should be protected from spontaneous and desynced operations. Other words - UI's reaction on user's events should be performed strictly in serial and arranged (consistent, if you will) manner. If UI-related tasks would run on concurrent queue, drawing on screen would complete with different speed and that would lead to unpredictable behaviour and misleading visual mess.
+That being said, main queue is a point of UI synchronization so to say.
 
 ### Common Concurrency Problems
 
@@ -208,5 +208,18 @@ value
  🦊🐔🐔 - 2
  see? no 😇 here
  */
+```
+
+Another race condition case (schematic):
+
+```markdown
+| Thread 1 | Thread 2 | Tech Row | Int |
+|:--------:|:--------:|:--------:|:---:|
+|   Read   |          |    <-    |  0  |
+|          |   Read   |    <-    |  0  |
+|   += 1   |          |          |  0  |
+|          |   += 1   |          |  0  |
+|   Write  |          |    ->    |  1  |
+|          |   Write  |    ->    |  1  |
 ```
 
