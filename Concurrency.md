@@ -1,22 +1,25 @@
-## What is GCD and How It Works?
+# What is GCD and How It Works?
 
-### References
+## References
 
 - [Многопоточность (concurrency) в Swift 3. GCD и Dispatch Queues](https://habr.com/post/320152/)
+- [Understanding how DispatchQueue.sync can cause deadlocks](https://www.donnywals.com/understanding-how-dispatchqueue-sync-can-cause-deadlocks/ )
+- [apple](https://github.com/apple)/[darwin-libpthread](https://github.com/apple/darwin-libpthread)/[include](https://github.com/apple/darwin-libpthread/tree/main/include)/[sys](https://github.com/apple/darwin-libpthread/tree/main/include/sys)/[qos.h](https://github.com/apple/darwin-libpthread/blob/main/include/sys/qos.h)
 - https://habr.com/post/335756/
 - http://greenteapress.com/semaphores/LittleBookOfSemaphores.pdf
 - https://stepik.org/course/3278/
 - https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html#//apple_ref/doc/uid/10000057i-CH1-SW1
 
-### Prologue
+## Definitions
+
+- queue – queue (🤣) that is used by `closures`(FIFO pattern)
+- task  – single piece of work aka `closure`
+- thread – sequence of instructions, executed on runtime
+- resource – almost anything: database / file / time to run the code / CPU core / variable etc
+
+## Prologue
 
 By default the app works on the main thread that manages the UI. If some heavy operation like downloading file or scanning a large database is added - UI can freeze.
-
-Definitions:
-
-- queue - queue (🤣) that is used by `closures`(FIFO pattern)
-- task  - single piece of work aka `closure`
-- thread - sequence of instructions, executed on runtime
 
 Single core CPUs can handle one task at a time on a single thread. Thus 'concurrency' in this case is achieved by rapidly switching between the tasks. Multicore CPUs can delegate each of it's cores to work with some threads (one per core). Both of these technologies use term 'concurrency'.
 
@@ -30,6 +33,8 @@ Apple provides the developers with several instruments:
 
 *NB
 Abstract class is a class that cannot be instantiated, but can be inherited from. It can contain abstract methods and properties. Abstract class `Animal`, can be developed to `class Cat: Animal` or `class Dog: Animal`.*
+
+## Queues
 
 ### Serial & Concurrent Queues
 
@@ -104,6 +109,9 @@ and returns control immediately.
 
 The main trick to be performed by developer is to wisely select the queue to receive tasks and to select appropriate task addition method. Everything else is handled by iOS.
 
+*NB*
+*Some say that due to it's blocking nature `sync` calls are encouraged only when the developer is >9000% sure it won't break something.*
+
 ### Use Case: Data Download
 
 Consider the code
@@ -132,11 +140,15 @@ queue.async {
 
 **4+ Concurrent Global Background Queues** with differentiating QoS (quality of service) and priority:
 
-1. `.userInteractive` - for tasks that interact with the user, like finger-drawing (user drags the finger / iOS calculates the curve that will be rendered). Though real implementation can show some delay, **main queue** is still listening to user's touches and reacts.
-2. `.userInitiated` - for tasks that are initiated by user and request feedback, but not in terms of interactive event; usually can take up to some seconds.
-3. `.utility` - for tasks that demand some time to execute, like data downloading or database cleaning / scanning etc; usually the user does not ask these tasks to be executed.
-4. `.background` - for tasks not connected to UI at all or not demanding to quick execution time like backups or web sync; these tasks can take hours to complete.
-5. `.default` - used when there's no info on QoS.
+1. `.userInteractive` - for tasks that interact directly with the user. Though real implementation can show some delay, **main queue** is still listening to user's touches and reacts. Specifying this QoS is a request to run with nearly all available system CPU and I/O bandwith, though it is not energy-efficient for large tasks. Should be limited thus to view drawing, animations, main run loop events.
+2. `.userInitiated` - second-highest priority task; not energy-efficient for large undertakings too; usage should be limited to opetiations of short enough duration that the user is unlikely to switch from the task until it's finished. Consider gathering complex data structure from persistent stores to present on the new screen after gathering.
+3. `.utility` - for tasks that demand some time to execute, like data downloading or database cleaning / scanning etc; usually the user does not ask these tasks to be executed. This QoS is energy and thermally-efficient and though the progress of this work may be not seen, the effect of such work is user-visible.
+4. `.background` - for tasks not connected to UI at all or not demanding to quick execution time like backups or web sync; these tasks can take hours to complete. Also such tasks was not be initiated by user and the user may be unaware of it. This is the most energy and thermally-efficient type of work
+5. `.default` - used when there's no info on QoS. This QoS is relatively higher than utility and background QoSs. This should be used only when propagating and restoring QoS class, provided by the system.
+
+
+
+6. `.unspecified` - indicates that thread was configured with legacy API that does not support QoS class system.
 
 *NB*
 *Needless to say that above listed queues (main + friends) are **system**, thus are actively used by iOS when the app is on run. Therefore user's tasks are not the sole customers of these queues.*
@@ -148,7 +160,9 @@ The sole SERIAL global queue is **main queue**. It is discouraged to perform non
 UI-related tasks can be performed only on main queue. This is enforced not only because one usually wants the UI tasks to run fluently but as well because the UI should be protected from spontaneous and desynced operations. Other words - UI's reaction on user's events should be performed strictly in serial and arranged (consistent, if you will) manner. If UI-related tasks would run on concurrent queue, drawing on screen would complete with different speed and that would lead to unpredictable behaviour and misleading visual mess.
 That being said, main queue is a point of UI synchronization so to say.
 
-### Common Concurrency Problems
+## Common Concurrency Problems
+
+### Introduction
 
 There are three main problems:
 
@@ -156,7 +170,11 @@ There are three main problems:
 2. Priority Inversion
 3. Deadlock
 
-Race condition case:
+### Race Condition
+
+This is a situation when app's the control flow irrationally accesses the shared resource from multiple threads and performs operations (on this resource) that are inconsistent with the desired logic and leads to unexpected outcomes. Generally this is the design error.
+
+Case 1
 
 ```swift
 import Dispatch
@@ -210,14 +228,120 @@ value
  */
 ```
 
-Another race condition case (schematic):
+Case 2 (schematic)
 
-| Thread 1 | Thread 2 | Tech Row | Some Integer | Comment                                                      |
-| :------: | :------: | :------: | :----------: | :----------------------------------------------------------- |
-|   Read   |          |   `<-`   |      0       | Int is `0`, app is reading it from some thread               |
-|          |   Read   |   `<-`   |      0       | Int is `0`, app is reading it from some other thread         |
-|   += 1   |          |          |      0       | Value is being incremented in-ram by some thread             |
-|          |   += 1   |          |      0       | Value is being incremented in-ram by some  other thread      |
-|  Write   |          |   `->`   |      1       | Some thread writes the value – now it is `1`                 |
-|          |  Write   |   `->`   |      1       | Some other thread (over)writes the value – now it is `1` as well |
+| Thread 1 | Thread 2 | R / W  | Some Integer | Comment                                                      |
+| :------: | :------: | :----: | :----------: | :----------------------------------------------------------- |
+|   Read   |          |  `<-`  |      0       | Int is `0`, app is reading it from some thread               |
+|          |   Read   |  `<-`  |      0       | Int is `0`, app is reading it from some other thread         |
+|   += 1   |          | `idle` |      0       | Value is being incremented in-ram by some thread             |
+|          |   += 1   | `idle` |      0       | Value is being incremented in-ram by some  other thread      |
+|  Write   |          |  `->`  |      1       | Some thread writes the value – now it is `1`                 |
+|          |  Write   |  `->`  |      1       | Some other thread (over)writes the value – now it is `1` as well |
+
+Code blocks that produce race condition are called critical zones.
+
+### Priority Inversion
+
+This is the state when the high-prioritized task cannot start execution (aka resources usage) due to less prioritized task had already locked the resources. Thereore high-priority task has to wait until the resources are unlocked.
+
+Case 1: Limited priority inversion
+
+Limitation - consider that in terms of case there is only one resource (consider it a variable); there is only two tasks, running each on its own thread.
+
+```
+                                                                                                   
+                                     Task B                                                         
+             Priority                tries to                 Task A                                
+           ^            Task B       gain                     finished        Now Task B            
+           |            comes in     access to                and unlocked    gains control         
+ High      |                         resources                resource                              
+ (Task B)  |                  |----------|                         |-----------|-------->            
+           |                  |          |                         |           |                    
+           |                  |          |    Task A has           |           |                    
+           |                  |          |    already locked       |           |                    
+           |                  |          |    the Resource and     |           |                    
+           |                  |          |    goes until it's      |           |                    
+           |                  |          |    fininshed            |           |                    
+           |  Task A          |          |                         |           |                    
+           |  locked          |          |   (Priority inversion   |           |                    
+ Low       |  resources       |          |   zone here)            |           |                    
+ (Task A)  |---------|--------|          |-------------------------|           |                    
+           |         |        |          |                         |           |                    
+           |         |        |          |                         |           |                    
+           |         |        |          |                         |           |                    
+           +---------|--------|----------|-------------------------|-----------|------->            
+                    T1       T2         T3                        T4          T5                          
+```
+
+If task B of high priority sets in **after** the low-priority task A has locked the resource. B has to wait until A frees up the resource, despite B has the highest priority among the two. Saying naturally, their priorities are inverted (see T3-T4). 
+
+Case 2: Unlimited Priority Inversion
+
+Same limitations apply, though additional mid-priority task C added + it is unknown whether there are more tasks.
+
+```
+            Priority                                                                               
+          ^                                                                                        
+          |                                                                                        
+ High     |           B appears      B waits                          B locks                      
+ (Task B) |                  |----------|                         |------|------------->            
+          |                  |          |     Unlimited           |      |                         
+          |                  |          |     Priority Inversion  |      |                         
+          |                  |          |     Zone                |      |                         
+ Mid      |                  |          |                         |      |    • More tasks?                     
+ (Task C) |                  |          |        C appears        |      |    • What if after C comes D?                     
+          |                  |          |       |---------|       |      |    • B would still wait                     
+          |                  |          |     L |         |U      |      |    • What if after D some recurrent task                     
+          |                  |          |       |         |       |      |      comes?                     
+ Low      |      A locks     |          |       |         |  A unlocks   |    • B could wait forever                     
+ (Task A) |---------|--------|          |-------| A waits |-------|      |                         
+          |         |        |          |       |         |       |      |                         
+          |         |        |          |       |         |       |      |                         
+          |         |        |          |       |         |       |      |                         
+          +---------|--------|----------|-------|---------|-------|------|------------>            
+                   T1       T2         T3      T4        T5      T6     T7                         
+```
+
+Here is the same thing, but at T4 comes in task C, which priority is higher that A but lower than B. A/B priorities are already inverted, so B waits for A. But C is higher in priority than A, so the system can decide to put A on hold, force it to wait, unlock the resource for C and let it do it's job.
+
+### Deadlock
+
+*NB*
+*The app usually crashes with `EXC_BAD_INSTRUCTION (code=EXC_I386_INVOP, subcode=0x0)` when the deadlock occurs.*
+
+In short the deadlock is the state when the app is waiting for some resource to be freed when its impossible for this resource to become available.
+
+Deadlock Case (Abstracted)
+
+Consider this is a restaurant where the waiter **synchronously** waits until the chef will serve the soup. but the client did not specified what kind of soup she wants, so the chef cannot serve the soup and **synchronously** asks the waiter to determine the soup type. Now they're **deadlocked** 💀. This means that the client will never receive the soup as the waiter won't move until the chef serves the soup and the chef, in turn will never serve soup until he knows what concrete type of soup to cook.
+
+```swift
+import Dispatch
+
+let waiter = DispatchQueue(label: "waiter")
+let chef = DispatchQueue(label: "chef")
+
+// synchronously order the soup
+
+waiter.sync {
+  print("Waiter: hi chef, please make me 1 soup.")
+
+  // synchronously prepare the soup
+  
+  chef.sync {
+	print("Chef: sure thing! Please ask the customer what soup they wanted.")
+
+		// synchronously ask for clarification
+    
+    waiter.sync { // waiter is already waiting for chef to finish the operation, so deadlock here
+      print("Waiter: Sure thing!")
+
+      print("Waiter: Hello customer. What soup did you want again?")
+    }
+  }
+}
+
+// making any of these three steps async solves the problem
+```
 
