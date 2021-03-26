@@ -212,14 +212,12 @@ value
 
 Another race condition case (schematic):
 
-```markdown
-| Thread 1 | Thread 2 | Tech Row | Int |
-|:--------:|:--------:|:--------:|:---:|
-|   Read   |          |    <-    |  0  |
-|          |   Read   |    <-    |  0  |
-|   += 1   |          |          |  0  |
-|          |   += 1   |          |  0  |
-|   Write  |          |    ->    |  1  |
-|          |   Write  |    ->    |  1  |
-```
+| Thread 1 | Thread 2 | Tech Row | Some Integer | Comment                                                      |
+| :------: | :------: | :------: | :----------: | :----------------------------------------------------------- |
+|   Read   |          |   `<-`   |      0       | Int is `0`, app is reading it from some thread               |
+|          |   Read   |   `<-`   |      0       | Int is `0`, app is reading it from some other thread         |
+|   += 1   |          |          |      0       | Value is being incremented in-ram by some thread             |
+|          |   += 1   |          |      0       | Value is being incremented in-ram by some  other thread      |
+|  Write   |          |   `->`   |      1       | Some thread writes the value – now it is `1`                 |
+|          |  Write   |   `->`   |      1       | Some other thread (over)writes the value – now it is `1` as well |
 
