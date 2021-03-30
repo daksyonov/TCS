@@ -380,7 +380,7 @@ waiter.sync {
 
 *NB*
 
-*All constants `let ` in Swift are thread-sade by default. We can say that due to facts that constants are:*
+*All constants `let` in Swift are thread-sade by default. We can say that due to facts that constants are:*
 
 - *atomic - set in a single step from the perspective of other threads (regardless of what other threads are executing) ~> it can be safely accessed from other threads*
 - *immutable - once initialized, they can't be changed (of course with caveats)*
@@ -391,3 +391,25 @@ waiter.sync {
 
 - *reads occure synchronously and on multiple threads*
 - *writes occur asynchronously and each separati write is the sole task, the variable is exposed to at a given time*
+
+**How to tackle this challenge?**
+
+Swift provides `Dispatch Barriers` - they stop any other execution on the queue, regardless of its status and priority until the barrier-task is finished. It works like a sync function by nature. Also all items that are scheduled to execute before the barrier-task are executed to completion.
+
+```
+
+ │ ┌──────────┐       │                              │   ┌───────────┐
+ │ │ Task     │       │                              │   │ Task      │
+ │ └──────────┘       │                              │   └───────────┘
+ │                    │                              │
+ │      ┌───────────┐ │   ┌───────────────────────┐  │          ┌─────────────┐
+ │      │  Task     │ │   │ Barrier Task          │  │          │ Task        │
+ │      └───────────┘ │   └───────────────────────┘  │          └─────────────┘
+ │                    │                              │
+ │ ┌──────────────┐   │                              │  ┌────────────┐
+ │ │  Task        │   │                              │  │ Task       │
+ │ └──────────────┘   │                              │  └────────────┘
+ └────────────────────┴──────────────────────────────┴─────────────────────►
+                      T1                             T2
+```
+
