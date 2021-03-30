@@ -366,8 +366,27 @@ waiter.sync {
 
 ### Image Downloading
 
-
+[See this playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/Concurrency/Patterns-Image%20DL.playground)
 
 ### Image Downloading via Dispatch Group
 
+[See this playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/Concurrency/Patterns-ImageDL%20via%20Group.playground)
+
 ### TableView / CollectionView Image Downloading
+
+[See this project](https://github.com/daksyonov/TCS/tree/main/Assets/ConcurrentImageDownload)
+
+### Thread-Safe Variables & Isolation Queues
+
+*NB*
+*All constants `let ` in Swift are thread-sade by default. We *can say that due to facts that constants are:*
+
+- *atomic - set in a single step from the perspective of other threads (regardless of what other threads are executing) ~> it can be safely accessed from other threads*
+- *immutable - once initialized, they can't be changed (of course with caveats)*
+
+*Variables, being mutable and and non-atomic (thus not thread-safe) can be exposed to various problems like race condition.*
+
+*The ideal variant of thread safety therefore would be:*
+
+- *reads occure synchronously and on multiple threads*
+- *writes occur asynchronously and each separati write is the sole task, the variable is exposed to at a given time*
