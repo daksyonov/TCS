@@ -38,8 +38,8 @@ Abstract class is a class that cannot be instantiated, but can be inherited from
 
 ### Serial & Concurrent Queues
 
-**Serial Queues** - iOS drags out the top task of the stack, w8s until it finihes execution and then drags out next task.
-**Concurrent Queues** - iOS drags out top task of the stack, starts it's execution on some thread and if there's a 'free power' left iOS drags out next task and executes it on some other thread while the first (in this case) task is still running. Concurrent queues can save time on tasks execution therefore.
+**Serial Queues** - iOS drags out the first task, w8s until it finihes execution and then drags out next task.
+**Concurrent Queues** - iOS drags out the first task, starts it's execution on some thread and if there's a 'free room' left, iOS drags out next task and executes it on some other thread while the first (in this case) task is still running. Concurrent queues can save time on tasks execution therefore.
 
 ### Synchronous & Asynchronous Task Execution
 
@@ -159,6 +159,10 @@ The sole SERIAL global queue is **main queue**. It is discouraged to perform non
 
 UI-related tasks can be performed only on main queue. This is enforced not only because one usually wants the UI tasks to run fluently but as well because the UI should be protected from spontaneous and desynced operations. Other words - UI's reaction on user's events should be performed strictly in serial and arranged (consistent, if you will) manner. If UI-related tasks would run on concurrent queue, drawing on screen would complete with different speed and that would lead to unpredictable behaviour and misleading visual mess.
 That being said, main queue is a point of UI synchronization so to say.
+
+### Private Queues
+
+Created on user demand and represent resource-freed (in comparison with system queues) opertaion queues. If no arguments are specified (except the queue label `let myPrivateQueue = DispatchQueue(label: "com.dimka.mySerialQueue")`) upon initialisation – the queue is created as serial by default.
 
 ## Common Concurrency Problems
 
@@ -305,6 +309,19 @@ Same limitations apply, though additional mid-priority task C added + it is unkn
 
 Here is the same thing, but at T4 comes in task C, which priority is higher that A but lower than B. A/B priorities are already inverted, so B waits for A. But C is higher in priority than A, so the system can decide to put A on hold, force it to wait, unlock the resource for C and let it do it's job.
 
+Enforsing QoS can mitigate priority inversion. For one, creating a task as a `DispatchWorkItem` with flag `[.enforceQoS]` and setting QoS explicitly:
+
+```swift
+let highPriorityItem = DispatchWorkItem(
+	qos: .userInteractive, // here QoS os explicitly stated
+	flags: [.enforceQoS], // here the flag set to enforce QoS regardless of queue-set QoS
+	block: {
+		highPriorityTask("🌸")
+	})
+```
+
+can mitigate the risk of priority inversion. If this flag is not set – the item will execute with the priority, inherited from the queue on which it was sent.
+
 ### Deadlock
 
 *NB*
@@ -345,3 +362,12 @@ waiter.sync {
 // making any of these three steps async solves the problem
 ```
 
+## Common iOS Concurrency Patterns
+
+### Image Downloading
+
+
+
+### Image Downloading via Dispatch Group
+
+### TableView / CollectionView Image Downloading
