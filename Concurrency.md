@@ -380,7 +380,7 @@ waiter.sync {
 
 *NB*
 
-*All constants `let ` in Swift are thread-sade by default. We *can say that due to facts that constants are:*
+*All constants `let ` in Swift are thread-sade by default. We can say that due to facts that constants are:*
 
 - *atomic - set in a single step from the perspective of other threads (regardless of what other threads are executing) ~> it can be safely accessed from other threads*
 - *immutable - once initialized, they can't be changed (of course with caveats)*
