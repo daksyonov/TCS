@@ -43,7 +43,7 @@ Abstract class is a class that cannot be instantiated, but can be inherited from
 
 ### Synchronous & Asynchronous Task Execution
 
-Sync task execution returns control to queue only after the task has been executed, thereby locking the queue. In contrast async task execution returns control immediately after sending the task on some other queue, thereby not locking the queue.
+Sync task execution returns control to queue only after the task has been executed, thereby locking the queue. In contrast async task execution returns control immediately after scheduling the task.
 
 Consider the code:
 
@@ -364,19 +364,19 @@ waiter.sync {
 
 ## Common iOS Concurrency Patterns
 
-### Image Downloading
+### Image Downloading [TBD After Next Materials]
 
 [See this playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/Concurrency/Patterns-Image%20DL.playground)
 
-### Image Downloading via Dispatch Group
+### Image Downloading via Dispatch Group [TBD After Next Materials]
 
 [See this playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/Concurrency/Patterns-ImageDL%20via%20Group.playground)
 
-### TableView / CollectionView Image Downloading
+### TableView / CollectionView Image Downloading [TBD After Next Materials]
 
 [See this project](https://github.com/daksyonov/TCS/tree/main/Assets/ConcurrentImageDownload)
 
-### Thread-Safe Variables & Isolation Queues
+### Thread-Safe Variables & Isolation Queues [TBD After Next Materials]
 
 *NB*
 

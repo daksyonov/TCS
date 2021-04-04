@@ -265,3 +265,17 @@ animal = Cat() // animal may not containt data that cat has, so a compiler error
 
 
 What is KVO
+
+Value types vs Reference Types
+
+Optionals Under the Hood
+
+ARC vs MRC
+
+Structures in Swift
+
+Classes in Swift
+
+Closures
+
+Swift Standard Library (with [GitHub](https://github.com/apple/swift/tree/main/stdlib)!!!)
