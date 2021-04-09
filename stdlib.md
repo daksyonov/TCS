@@ -102,7 +102,7 @@ C `bool` and Objective-C `BOOL` are bridged into Swift as `Bool`.
 
 Bool experiments can be found here:
 
-
+[TCS](https://github.com/daksyonov/TCS)/[Assets](https://github.com/daksyonov/TCS/tree/main/Assets)/[Playgrounds](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds)/[stdlib](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/stdlib)/[Bool.playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/stdlib/Bool.playground)/[Contents.swift](https://github.com/daksyonov/TCS/blob/main/Assets/Playgrounds/stdlib/Bool.playground/Contents.swift)
 
 ### Number Values / Int
 
