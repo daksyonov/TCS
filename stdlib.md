@@ -219,12 +219,12 @@ The main advantage of this operations is that they act as a shorthand and frees 
 
 #### Performing Masked Arithmetic
 
-Integers are overflow-prone that means if some integer cannot fit some binary group, this will result in compiler error (if `-0unchecked` is unmarked). Swift gets us covered with some stuff like:
+Integers are overflow-prone which means if some integer cannot fit the receiver's binary group, this will result in compiler error (if `-0unchecked` is unmarked). Swift gets us covered with some stuff like:
 
 - overflow operators: `&+`, `&-`, `&*`
 - overflow assignment operators: `&+=`, `&-=`, `&*=`
 
-These ones work similarly to ordinary operators with one freedom – they'll silently discard any bits that caused an overflow (if any) and wrap the result as a partial value.
+These ones work similarly to their non-masked neighbours – they'll silently discard any overflowing bits and wrap the result as a partial value.
 
 Here's what happens, for one, with `UInt8`:
 
@@ -248,7 +248,7 @@ var unsignedOverflow = UInt8.max
 ///   ¯¯¯  |  ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯  
 /// 
 ///  This is quite natural – if we add additional binary to the last
-///  rank, it will be forced to round up by math rules until the last rank
+///  order, it will be forced to round up by math rules until the last order
 ///  satisfies the rule. Therefore this calculation results in additional bit
 ///  that is overflowing. As the UInt8 can hold only 8 bits, all eight zeros
 ///  are stored in the variable after the calculation.
@@ -291,9 +291,131 @@ var unsignedOverflow = UInt8.min
 var overflownRes = unsignedOverflow &- 1
 ```
 
+Well, another example just to hone things up:
+
+```swift
+  ┌───────────────────┐
+  │+1 from order shift│
+  └───────┬─┬─┬─┬─┬───┘
+          │ │ │ │ │
+          ▼ ▼ ▼ ▼ ▼
+  254     1 1 1 1 1 1 1 0
+          │ │ │ │ │ │ │ │
+  &+      │ │ │ │ │ │ │ │
+          │ ▼ ▼ ▼ ▼ ▼ ▼ ▼
+  123     ▼ 1 1 1 1 0 1 1
+         ────────────────
+  = 121 : 0 1 1 1 1 0 0 1
+```
+
 Rule of thumb here:
 
-**For both signed and unsigned integers, overflow in the positive direction wraps around from the max valut integer back to the minimum and overflow in the negative direction wraps around from the minimum value to the maximum.**
+**For both signed and unsigned integers, overflow in positive direction wraps around from the max value back to the minimum and overflow in negative direction wraps around from the minimum value to the maximum.**
+
+#### Bitwise Operations
+
+As integers are `bitty` by nature, bitwise operations apply to them. General truth table applies too. stdlib provides bitwise `AND` / `OR` / `XOR` / `NOT` operators and let's just quickly recap what they do:
+
+- `AND` (`&`) – if both bit values are set to `1` the result is `1`, otherwise it is `0`
+- `OR` (`|`) – if one or both bit values are set to `1` the result is `1`, otherwise it is `0`
+- `XOR` (`^`) – if one or the other bit value (*but not the both*) is set to `1`, the result is `1`
+- `NOT` (`~`) – values are flipped, so if the bit value was set to `1` if will turn `0` and v/v
+
+These operators have their corresponding shorthand assignmnent neighbours.
+
+#### Bit Shift Operations
+
+Okay, so here we have right shift `>>`, letft shift `<<` and their masking and assignment interpretations. The strange thing that these operators have at least two implementations at a higher level, each one generic. One implementations accepts `<RHS>` genric parameter, and the second accepts `<Other>` generic parameter. Strange as it may sound, but even diff-checking the whole doc page did not lit any more differences, except parameters name. Also in [swift](https://github.com/apple/swift/commits/main)/[stdlib](https://github.com/apple/swift/commits/main/stdlib)/[public](https://github.com/apple/swift/commits/main/stdlib/public)/[core](https://github.com/apple/swift/commits/main/stdlib/public/core)/[Integers.swift](https://github.com/apple/swift/blob/main/stdlib/public/core/Integers.swift) I did not founf the implementation of `<Other>` method, thus let's say that it is just a convenience measure and maybe in future that `<Other>` method will deprecate.
+
+`<<` shifts bits of the receiver to left by the specified number of positions:
+
+```swift
+var x: UInt8 = 30 // 0b00011110
+let y = x << 2 // 0b01111000 [aka 120 in decimals]
+
+/// Overshift simulation
+x >>= 2
+x <<= 11 // 0b00000000
+
+/// Using neative value for shift is the same as performing right shift
+var a: UInt8 = 30 // 0b00011110
+a <<= -3 // 0b00000011
+```
+
+`>>` shifts the bits of the receiver to the right by the specified number of positions.
+
+```swift
+var x: UInt8 = 30 // 0b00011110
+let y = x >> 2 // 0b00000111 [aka 7 in decimals]
+
+/// Overshift applies
+
+/// Using neative value for shift is the same as performing left shift
+
+/// `>>` on negative values fill in the higher bits with 1 and that 1s do not count
+```
+
+Spin-off: here I just play around with some integers
+
+```swift
+let someNegativeInt: Int8 = -100 // -0b1100100
+
+-100 	=  -1100100 	= 0+0+2^2+0+0+2^5+2^6
+-56 	=  -111000 		= 0+0+0+2^3+2^4+2^5
+-5 		=  -101 			= 2^0+0+2^2
+-11 	=  -1011			= 2^0+2^1+0+2^3
+-99 	=  -1100011		= 2^0+2^1+0+0+0+2^5+2^6
+```
+
+Calculating right to left will give `2^0+0+2^2+2^3+2^4+0+0+0 = 29`
+
+These operators perform smart shifts aka:
+
+- negative value for left shift's `rhs` performs right shift with the abs value of `rhs`
+- if `rhs` value is greater than the `lhs` bit width that results in an overshift – the result will be 0
+
+Their assignment neighbour does the same, but stores the result in the lhs variable.
+
+`&<<` and `&>>` are masking shift operators that are used to perform bit shifts within the range of the receiver. 
+
+```swift
+let x: UInt8 = 30                 // 0b00011110
+let y = x &<< 2
+
+// y == 120                       // 0b01111000
+```
+
+That means (in terms of the case above) when the first `1` will fly out of bounds, it will appear in the beginning of the bit width.
+
+#### Some Useful Calculation Methods
+
+Integers can be nagated by `negate()` method that, surprisingly negates the value of an integer. This operation is overflow-prone, e.g. negating `Int8.min` (-128) will result in an overflow error as 128 is not representable in signed 8-bit group. This is not a bitwise negation, thus this is not something like:
+
+```swift
+for bit in integer.bits {
+  bit ~= bit
+}
+```
+
+This is an arithmetic negation, by simply multiplying by 1 and then checking if the result suits the receiver.
+
+Whenever you want to calculate the qoutent and remainder of the integer, it is useful to use the corresponding function that will return the tuple, containing `q` and `r` respectively.
+
+```swift
+/// Quotient and Remainder
+let x5 = 1000
+var (quotient, remainder) = x5.quotientAndRemainder(dividingBy: 21)
+/// output: (47, 13)
+```
+
+Back to the school class, pals – now there's a time to find if the value is the multiple of some other value. The receiver is the multiple of the given value in case when there is a third value, by which the given value can be multiplied. `Int8.init(15).isMultiple(of: 5) // returns true` because 5*3 is 15. Zero is the multiple of everything.
+
+Edge cases:
+
+- x is multiple of 0 only if x = 0
+- `Int8.min.isMultiple(of: -1)` is `true` even though the quotient is not representable in `Int8`.
+
+
 
 ### Number Values / Double
 
