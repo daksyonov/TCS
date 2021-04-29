@@ -1,66 +1,63 @@
-# 1. STDLIB
-
-## 1.1. Table of Contents
-- [1. STDLIB](#1-stdlib)
-  - [1.1. Table of Contents](#11-table-of-contents)
-  - [1.2. Foreword](#12-foreword)
-  - [1.3. Spin-Offs](#13-spin-offs)
-    - [1.3.1. Big Endian vs. Little Endian](#131-big-endian-vs-little-endian)
-    - [1.3.2. `@frozen`](#132-frozen)
-    - [1.3.3. `@_transparent`](#133-_transparent)
-    - [1.3.4. `@inline`](#134-inline)
-    - [1.3.5. `@autoclosure`](#135-autoclosure)
-    - [1.3.6. Binary Overflow](#136-binary-overflow)
-    - [1.3.7. Binary Signed Representation: Sign and Magnitude](#137-binary-signed-representation-sign-and-magnitude)
-    - [1.3.8. Binary Signed Representation: Two's Complement](#138-binary-signed-representation-twos-complement)
-    - [1.3.9. Words](#139-words)
-  - [1.4. Numbers and Basic Values](#14-numbers-and-basic-values)
-    - [1.4.1. Logical Values / Bool](#141-logical-values--bool)
-    - [1.4.2. Number Values / Int](#142-number-values--int)
-      - [1.4.2.1. Introduction](#1421-introduction)
-      - [1.4.2.2. Int Sizes](#1422-int-sizes)
-      - [1.4.2.3. Initialization](#1423-initialization)
-      - [1.4.2.4. Performing Calculations](#1424-performing-calculations)
-      - [1.4.2.5. Performing Calculations with Assignment](#1425-performing-calculations-with-assignment)
-      - [1.4.2.6. Performing Masked Arithmetic](#1426-performing-masked-arithmetic)
-      - [1.4.2.7. Bitwise Operations](#1427-bitwise-operations)
-      - [1.4.2.8. Bit Shift Operations](#1428-bit-shift-operations)
-      - [1.4.2.9. Some Useful Calculation Methods](#1429-some-useful-calculation-methods)
-      - [1.4.2.10. Operations with Binary Representation](#14210-operations-with-binary-representation)
-    - [1.4.3. Number Values / Double](#143-number-values--double)
-    - [1.4.4. Number Values / Float](#144-number-values--float)
-    - [1.4.5. Errors / Error](#145-errors--error)
-    - [1.4.6. Errors / Result](#146-errors--result)
-    - [1.4.7. Optionals / Optional](#147-optionals--optional)
-      - [1.4.7.1. Introduction](#1471-introduction)
-      - [1.4.7.2. Optional Techniques: `if let` / `guard let` / `switch`](#1472-optional-techniques-if-let--guard-let--switch)
-      - [1.4.7.3. Optional Techniques: `while let`](#1473-optional-techniques-while-let)
-      - [1.4.7.4. Optional Techniques: `for case let i?`](#1474-optional-techniques-for-case-leti)
-      - [1.4.7.5. Optional Techniques: `if var`](#1475-optional-techniques-if-var)
-      - [1.4.7.6. Double-wrapped Optionals](#1476-double-wrapped-optionals)
-      - [1.4.7.7. Optional Chaining](#1477-optional-chaining)
-      - [1.4.7.8. The nil-coalescing operator](#1478-the-nil-coalescing-operator)
-      - [1.4.7.9. Optional `flatMap`](#1479-optional-flatmap)
-      - [1.4.7.10. Optional `compactMap`](#14710-optional-compactmap)
-      - [1.4.7.11. Equating Optionals](#14711-equating-optionals)
-      - [1.4.7.12. Nillifying Dictionaries](#14712-nillifying-dictionaries)
-      - [1.4.7.13. Compating Optionals](#14713-compating-optionals)
-    - [1.4.8. Basic Arithmetic Protocols](#148-basic-arithmetic-protocols)
-  - [1.5. Strings And Text](#15-strings-and-text)
-    - [1.5.1. Strings and Characters / String](#151-strings-and-characters--string)
-    - [1.5.2. Strings and Characters / Character](#152-strings-and-characters--character)
-    - [1.5.3. Encoding And Storage / Unicode](#153-encoding-and-storage--unicode)
-    - [1.5.4. Compile-TimeStrings / Static String](#154-compile-timestrings--static-string)
-  - [1.6. Collections](#16-collections)
+# 1. Table of Contents
+- [1. Table of Contents](#1-table-of-contents)
+- [2. Foreword](#2-foreword)
+- [3. Spin-Offs](#3-spin-offs)
+  - [3.1. Big Endian vs. Little Endian](#31-big-endian-vs-little-endian)
+  - [3.2. `@frozen`](#32-frozen)
+  - [3.3. `@_transparent`](#33-_transparent)
+  - [3.4. `@inline`](#34-inline)
+  - [3.5. `@autoclosure`](#35-autoclosure)
+  - [3.6. Binary Overflow](#36-binary-overflow)
+  - [3.7. Binary Signed Representation: Sign and Magnitude](#37-binary-signed-representation-sign-and-magnitude)
+  - [3.8. Binary Signed Representation: Two's Complement](#38-binary-signed-representation-twos-complement)
+  - [3.9. Words](#39-words)
+- [4. Numbers and Basic Values](#4-numbers-and-basic-values)
+  - [4.1. Logical Values / Bool](#41-logical-values--bool)
+  - [4.2. Number Values / Int](#42-number-values--int)
+    - [4.2.1. Introduction](#421-introduction)
+    - [4.2.2. Int Sizes](#422-int-sizes)
+    - [4.2.3. Initialization](#423-initialization)
+    - [4.2.4. Performing Calculations](#424-performing-calculations)
+    - [4.2.5. Performing Calculations with Assignment](#425-performing-calculations-with-assignment)
+    - [4.2.6. Performing Masked Arithmetic](#426-performing-masked-arithmetic)
+    - [4.2.7. Bitwise Operations](#427-bitwise-operations)
+    - [4.2.8. Bit Shift Operations](#428-bit-shift-operations)
+    - [4.2.9. Some Useful Calculation Methods](#429-some-useful-calculation-methods)
+    - [4.2.10. Operations with Binary Representation](#4210-operations-with-binary-representation)
+  - [4.3. Number Values / Double](#43-number-values--double)
+  - [4.4. Number Values / Float](#44-number-values--float)
+  - [4.5. Errors / Error](#45-errors--error)
+  - [4.6. Errors / Result](#46-errors--result)
+  - [4.7. Optionals / Optional](#47-optionals--optional)
+    - [4.7.1. Introduction](#471-introduction)
+    - [4.7.2. Optional Techniques: `if let` / `guard let` / `switch`](#472-optional-techniques-if-let--guard-let--switch)
+    - [4.7.3. Optional Techniques: `while let`](#473-optional-techniques-while-let)
+    - [4.7.4. Optional Techniques: `for case let i?`](#474-optional-techniques-for-case-leti)
+    - [4.7.5. Optional Techniques: `if var`](#475-optional-techniques-if-var)
+    - [4.7.6. Double-wrapped Optionals](#476-double-wrapped-optionals)
+    - [4.7.7. Optional Chaining](#477-optional-chaining)
+    - [4.7.8. The nil-coalescing operator](#478-the-nil-coalescing-operator)
+    - [4.7.9. Optional `flatMap`](#479-optional-flatmap)
+    - [4.7.10. Optional `compactMap`](#4710-optional-compactmap)
+    - [4.7.11. Equating Optionals](#4711-equating-optionals)
+    - [4.7.12. Nillifying Dictionaries](#4712-nillifying-dictionaries)
+    - [4.7.13. Compating Optionals](#4713-compating-optionals)
+  - [4.8. Basic Arithmetic Protocols](#48-basic-arithmetic-protocols)
+  - [4.9. Strings And Text](#49-strings-and-text)
+    - [4.9.1. Strings and Characters / String](#491-strings-and-characters--string)
+    - [4.9.2. Strings and Characters / Character](#492-strings-and-characters--character)
+    - [4.9.3. Encoding And Storage / Unicode](#493-encoding-and-storage--unicode)
+    - [4.9.4. Compile-TimeStrings / Static String](#494-compile-timestrings--static-string)
+  - [4.10. Collections](#410-collections)
 
 
-## 1.2. Foreword
+# 2. Foreword
 
 Exploring [stdlib](https://github.com/apple/swift/tree/main/stdlib) here.
 
-## 1.3. Spin-Offs
+# 3. Spin-Offs
 
-### 1.3.1. Big Endian vs. Little Endian
+## 3.1. Big Endian vs. Little Endian
 
 This is just the order by which the bits are organised. Little endian is the way arabic writing goes – from right to left. Big endian is quite the opposite.
 
@@ -82,13 +79,13 @@ While the Big Endian representation would flip the bytes:
 00101001 00101101 11011010 10111100
 ```
 
-### 1.3.2. `@frozen`
+## 3.2. `@frozen`
 
 Reference - Proposal [SE-2060](https://github.com/apple/swift-evolution/blob/master/proposals/0260-library-evolution.md).
 
 When a library author is certain that there will never be a need to add fields to a struct in future, they may mary that struct as `@frozen`. Marking a structs as frozen only guarantees that stored instance properties won't change. This allows a compiler to perform certain optimizations.
 
-### 1.3.3. `@_transparent`
+## 3.3. `@_transparent`
 
 References:
 
@@ -97,14 +94,14 @@ References:
 
 This marks the operation in `stdlib` as primitive e.g. evaluating an expression, assigning a variable, indexing into an array, calling a method, returning from a method, etc. And there's some other stuff but I shan't serearch more at least for now as this is `not intended for ordinary language users`.
 
-### 1.3.4. `@inline`
+## 3.4. `@inline`
 
 Inlining is the direct replacing of the function call with the function implementation inside the code. This happens at compile time and provide a great performance boost. It can be used in two ways:
 
 - `@inline(__always)` – inline method always, if possible;
 - `@inline(__never)` – never inline the method.
 
-### 1.3.5. `@autoclosure`
+## 3.5. `@autoclosure`
 
 This attributes allows the compiler to treat an argument as a closure, so you don't need to perform trailing closure syntax. Consider the code.
 
@@ -126,7 +123,7 @@ func printTest2(_ res: @autoclosure () -> Void) {
 printTest2(print("hello")) // can now be passed as an argument
 ```
 
-### 1.3.6. Binary Overflow
+## 3.6. Binary Overflow
 
 Numbers in Binary systems can be represented from `-2^(n-1)` to `2^(n-1)-1`. Consider the following:
 
@@ -135,7 +132,7 @@ Numbers in Binary systems can be represented from `-2^(n-1)` to `2^(n-1)-1`. Con
 
 Overflow happens when some `2n bit` group is appended to existing `2n bit` group and the latter cannot fit the first, e.g. the answer is to large, to fit the receiver.
 
-### 1.3.7. Binary Signed Representation: Sign and Magnitude
+## 3.7. Binary Signed Representation: Sign and Magnitude
 
 MSB is a sign: `1` is negative, `0` is positive. This method has a few downsides:
 
@@ -145,7 +142,7 @@ MSB is a sign: `1` is negative, `0` is positive. This method has a few downsides
 
 Conclusion – this is a clumsy way to manipulate integers, fairly not obvious, though may confuse when doing some complex calculations.
 
-### 1.3.8. Binary Signed Representation: Two's Complement
+## 3.8. Binary Signed Representation: Two's Complement
 
 Reference: [University of Michigan Lecture on CS, fall 2014](https://www.eecs.umich.edu/courses/eecs452/Lec/L03SlidesF14.pdf)
 
@@ -187,13 +184,13 @@ Converting an N-bit 2's complement number to N+P bits is easy:
 
 All needed is just to duplicate the MSB P times and we get the value same as before.
 
-### 1.3.9. Words
+## 3.9. Words
 
 In computer architecture word is the smallest addressible unit of data, that can be any number of bits in length.
 
-## 1.4. Numbers and Basic Values
+# 4. Numbers and Basic Values
 
-### 1.4.1. Logical Values / Bool
+## 4.1. Logical Values / Bool
 
 This is a value type whose object value is either `true` or `false`. Integers and strings cannot be used where the Boolean is required – `let boolean: Bool = "YES"` or `let boolean: Bool = 0` will result in compilation error.
 
@@ -244,9 +241,9 @@ Bool experiments can be found here:
 
 [TCS](https://github.com/daksyonov/TCS)/[Assets](https://github.com/daksyonov/TCS/tree/main/Assets)/[Playgrounds](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds)/[stdlib](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/stdlib)/[Bool.playground](https://github.com/daksyonov/TCS/tree/main/Assets/Playgrounds/stdlib/Bool.playground)/[Contents.swift](https://github.com/daksyonov/TCS/blob/main/Assets/Playgrounds/stdlib/Bool.playground/Contents.swift)
 
-### 1.4.2. Number Values / Int
+## 4.2. Number Values / Int
 
-#### 1.4.2.1. Introduction
+### 4.2.1. Introduction
 
 This is a signed integer value type. Signed here means that `Int` can be negative, so it have a 'sign'.
 
@@ -261,7 +258,7 @@ This is a signed integer value type. Signed here means that `Int` can be negativ
 
 On 32-bit platforms `Int` is the same as `Int32`, on 64-bit platforms `Int` is the same as `Int64`. Each type of `Int` has it's own capacity (fixed size). That means each integer instance has it's own predetermined bit width, resulting in min and max values.
 
-#### 1.4.2.2. Int Sizes
+### 4.2.2. Int Sizes
 
 ```swift
 -----------------------------------------
@@ -295,7 +292,7 @@ The range is simple math. Consider on any arch the integer that can store 8 byte
 
 Note – the first bit of the signed integer is the 'sign' bit.
 
-#### 1.4.2.3. Initialization
+### 4.2.3. Initialization
 
 `Int` can be initialized in various ways, for example it can be formed from the bit-width of the given value. In this case the bit width is truncated if it is equal or greater then the expected type. Also it can calculate the closest value that will fit the width of the receiver. Consider the code below.
 
@@ -323,7 +320,7 @@ To structure we can say that `Int` can be initialised from:
 - converting strings: ASCII representation (format sensitive – only "123" counts) or ASCII representation passed as radix (or base) (format sensitive as well)
 - creating a random integer: `Range`, `ClosedRange`, `ClosedRange` + `RNG`
 
-#### 1.4.2.4. Performing Calculations
+### 4.2.4. Performing Calculations
 
 Integers can be summed up, subtracted from and multiplied by each other – that's quite expectable by their nature. This is achieved via addition / subtraction / multilication operators (`+` / `-` / `*`) These operators have some constraints:
 
@@ -342,14 +339,14 @@ Division `/` and remainder `%` operations came to integers from `BinaryIntger` p
 
 Some constraints here too – arguments should be of the same type.
 
-#### 1.4.2.5. Performing Calculations with Assignment
+### 4.2.5. Performing Calculations with Assignment
 
 Calculations with assignment allows to store the result in he `lhs` variable (`(lhs: inout Int, rhs: Int)`). Operations available: addition, subtraction, multiplication, division and remainder-division.
 Same constrains apply – overflow-prone & type sensitive.
 
 The main advantage of this operations is that they act as a shorthand and frees you up from writing long constructions with another instance declaration. The drawback is that the varianble on which the operation should be applied has to be variable and maybe sometimes in cases when the code is already messed up it can add up to disorderliness.
 
-#### 1.4.2.6. Performing Masked Arithmetic
+### 4.2.6. Performing Masked Arithmetic
 
 Integers are overflow-prone which means if some integer cannot fit the receiver's binary group, this will result in compiler error (if `-0unchecked` is unmarked). Swift gets us covered with some stuff like:
 
@@ -444,7 +441,7 @@ Rule of thumb here:
 
 **For both signed and unsigned integers, overflow in positive direction wraps around from the max value back to the minimum and overflow in negative direction wraps around from the minimum value to the maximum.**
 
-#### 1.4.2.7. Bitwise Operations
+### 4.2.7. Bitwise Operations
 
 As integers are `bitty` by nature, bitwise operations apply to them. General truth table applies too. stdlib provides bitwise `AND` / `OR` / `XOR` / `NOT` operators and let's just quickly recap what they do:
 
@@ -455,7 +452,7 @@ As integers are `bitty` by nature, bitwise operations apply to them. General tru
 
 These operators have their corresponding shorthand assignmnent neighbours.
 
-#### 1.4.2.8. Bit Shift Operations
+### 4.2.8. Bit Shift Operations
 
 Okay, so here we have right shift `>>`, letft shift `<<` and their masking and assignment interpretations. The strange thing that these operators have at least two implementations at a higher level, each one generic. One implementations accepts `<RHS>` genric parameter, and the second accepts `<Other>` generic parameter. Strange as it may sound, but even diff-checking the whole doc page did not lit any more differences, except parameters name. Also in [swift](https://github.com/apple/swift/commits/main)/[stdlib](https://github.com/apple/swift/commits/main/stdlib)/[public](https://github.com/apple/swift/commits/main/stdlib/public)/[core](https://github.com/apple/swift/commits/main/stdlib/public/core)/[Integers.swift](https://github.com/apple/swift/blob/main/stdlib/public/core/Integers.swift) I did not founf the implementation of `<Other>` method, thus let's say that it is just a convenience measure and maybe in future that `<Other>` method will deprecate.
 
@@ -517,7 +514,7 @@ let y = x &<< 2
 
 That means (in terms of the case above) when the first `1` will fly out of bounds, it will appear in the beginning of the bit width.
 
-#### 1.4.2.9. Some Useful Calculation Methods
+### 4.2.9. Some Useful Calculation Methods
 
 Integers can be nagated by `negate()` method that, surprisingly negates the value of an integer. This operation is overflow-prone, e.g. negating `Int8.min` (-128) will result in an overflow error as 128 is not representable in signed 8-bit group. This is not a bitwise negation, thus **this is not something like:**
 
@@ -569,13 +566,13 @@ String(x8, radix: 2)
 (-128 + 64 + 32 + 16 + 8 + 4 + 2) = -2
 ```
 
-#### 1.4.2.10. Operations with Binary Representation
+### 4.2.10. Operations with Binary Representation
 
 You can get the `bitWidth` of Int instance (`static` and non-`static` `var`) – useful to check what platform (64-32) you're using. Trailing and leading zeros bit count can be checked by `var leadingZeroBitCount: Int { get }` & `var trailingZeroBitCount: Int { get }`.
 
 You can gen the `words` og the integer.
 
-### 1.4.3. Number Values / Double
+## 4.3. Number Values / Double
 
 This is a double-precision floating point value, that can be initialized via:
 
@@ -589,13 +586,13 @@ As `Int` `Double` comes with all standard arithmetic operations, but also it can
 
 Doubles can be rounded, compared and comes with more mathematical operations, than Int. You can check magnitude, significand and the exponent. As well as the other operations.
 
-### 1.4.4. Number Values / Float
+## 4.4. Number Values / Float
 
 Same as double but with single precision.
 
 Double vs single precision – double precision is the precision that requires twice more bits then the single precision.
 
-### 1.4.5. Errors / Error
+## 4.5. Errors / Error
 
 This is a protocol (type) of an error value that can be thrown. Enums are good for errors:
 
@@ -644,7 +641,7 @@ Error by default have domain and code that can allow one to distinguish between 
 
 As I see from the [source code](https://github.com/apple/swift/blob/main/stdlib/public/core/ErrorType.swift) – Error is a wrapper on NSError.
 
-### 1.4.6. Errors / Result
+## 4.6. Errors / Result
 
 This type represent either success or a failure including the associated value in each case. This is a slightly wider concept than errors, and technically `Result` does not represent the malfunctioning of some algorithm, rather that it ended in a negative way.
 
@@ -728,9 +725,9 @@ FitnessAPIClient.getClubSchedule { result in
 /// ...Scope ends
 ```
 
-### 1.4.7. Optionals / Optional
+## 4.7. Optionals / Optional
 
-#### 1.4.7.1. Introduction
+### 4.7.1. Introduction
 
 Optional is a `generic enumeration` that represents either a wrapped value or `nil`.
 
@@ -747,7 +744,7 @@ Optional is an enum that contains two cases:
 - .none - `nil`
 - .some - there is a wrapped value
 
-#### 1.4.7.2. Optional Techniques: `if let` / `guard let` / `switch`
+### 4.7.2. Optional Techniques: `if let` / `guard let` / `switch`
 
 `if let` / `guard let` / `switch` are used to bind the wrapped value to new variable if the value is not `nil`.
 
@@ -771,7 +768,7 @@ switch x {
 }
 ```
 
-#### 1.4.7.3. Optional Techniques: `while let`
+### 4.7.3. Optional Techniques: `while let`
 
 This is a loop that terminates when a condition returns `nil`.
 
@@ -786,7 +783,7 @@ while let i = iterator.next() {
 }
 ```
 
-#### 1.4.7.4. Optional Techniques: `for case let i?`
+### 4.7.4. Optional Techniques: `for case let i?`
 
 This is advanced one, but the essence is same as `flatMap()` – this one takes in account only non-nil elements of the sequence. Consider we have an array of optional `Int`s that we formed from an array of strings via `map()` and `Int.init(string)` passed to a transformation closure:
 
@@ -809,7 +806,7 @@ for case .some(let i) in optionalInts {
 }
 ```
 
-#### 1.4.7.5. Optional Techniques: `if var`
+### 4.7.5. Optional Techniques: `if var`
 
 Instead of using if let, one can use if var to mutate the unwrapped value inside the clause:
 
@@ -822,7 +819,7 @@ if var num = number {
 }
 ```
 
-#### 1.4.7.6. Double-wrapped Optionals
+### 4.7.6. Double-wrapped Optionals
 
 Consider that we need to make an array of optional integers based on the array of strings. Here we will use the failable initializer of `Int`:
 
@@ -863,7 +860,7 @@ let s2: String?? = .some(nil)
 (s2 ?? "inner") ?? "outer"
 ```
 
-#### 1.4.7.7. Optional Chaining
+### 4.7.7. Optional Chaining
 
 To safely access the property of an optional value, postfix optional chaining operator is used `?`. 
 
@@ -881,7 +878,7 @@ let clubAuthTypeId = currentInfo?.clubAuthType?.last?.clubAuthTypeId // Optional
 
 Here what we might get could be `Int????` but that could be troublesome to get through the multi-unwrapping. Swift destroys this discomfort by giving us single optional type. 
 
-#### 1.4.7.8. The nil-coalescing operator
+### 4.7.8. The nil-coalescing operator
 
 To supply the `default` value aka the value `in-case-the-optional-is-nil` the nil-coalescing operator is used:
 
@@ -971,47 +968,47 @@ class ProfileViewController: UIViewController {
 }
 ```
 
-#### 1.4.7.9. Optional `flatMap`
+### 4.7.9. Optional `flatMap`
 
 `flatMap` is very similair to `if let` construct as it checks whether the velue to be transformed is an optional or not. Optional chaining is very similar to `flatMap` as it too checks whether ther is something wrapped inside the optional prior to performing some transformation.
 
-#### 1.4.7.10. Optional `compactMap`
+### 4.7.10. Optional `compactMap`
 
 This is a fancy way to filter-out nils, somewhat similar to `for case let i? in someSequence.map({ /..transform../ }) { /..do something../ }`
 
-#### 1.4.7.11. Equating Optionals
+### 4.7.11. Equating Optionals
 
 All optionals can be equated but only if a wrapped type conforms to `Equatable`. If you try to compare optional and non-optional strings, compiler will silently promote non-optional value to optional to make the comparison possible. This implicit conversion goes througout the Swift. For one, take subscripting collections: this takes and returns the optional, no matter what we tried to pass in.
 
-#### 1.4.7.12. Nillifying Dictionaries
+### 4.7.12. Nillifying Dictionaries
 
 `var dictWithNils: [String: Int?] = ["one": 1, "two": 2, "three": nil]` - this dictionary has three keys, and one's value is set to `nil`. Suppose we want to set the second key to `nil`:
 
 - this won't do that: `dictWithNils["two"] = ni`
 - this will do: `dictWithNils["two"]? = nil`
 
-#### 1.4.7.13. Compating Optionals
+### 4.7.13. Compating Optionals
 
 It was someday, but removed in Swift 3.0. Many unexpected results were in place:
 
 - `nil < .some(_) = true`
 - `nil < 0 = true`
 
-### 1.4.8. Basic Arithmetic Protocols
+## 4.8. Basic Arithmetic Protocols
 
 
 
 
 
-## 1.5. Strings And Text
+## 4.9. Strings And Text
 
-### 1.5.1. Strings and Characters / String
+### 4.9.1. Strings and Characters / String
 
-### 1.5.2. Strings and Characters / Character
+### 4.9.2. Strings and Characters / Character
 
-### 1.5.3. Encoding And Storage / Unicode
+### 4.9.3. Encoding And Storage / Unicode
 
-### 1.5.4. Compile-TimeStrings / Static String
+### 4.9.4. Compile-TimeStrings / Static String
 
-## 1.6. Collections
+## 4.10. Collections
 
