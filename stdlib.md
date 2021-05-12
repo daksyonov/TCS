@@ -984,7 +984,7 @@ All optionals can be equated but only if a wrapped type conforms to `Equatable`.
 
 `var dictWithNils: [String: Int?] = ["one": 1, "two": 2, "three": nil]` - this dictionary has three keys, and one's value is set to `nil`. Suppose we want to set the second key to `nil`:
 
-- this won't do that: `dictWithNils["two"] = ni`
+- this won't do that: `dictWithNils["two"] = nil`
 - this will do: `dictWithNils["two"]? = nil`
 
 ### 4.7.13. Compating Optionals
@@ -996,9 +996,31 @@ It was someday, but removed in Swift 3.0. Many unexpected results were in place:
 
 ## 4.8. Basic Arithmetic Protocols
 
+These protocols give the common operation that can be performed on scalar values. Each next protocol complements the previous:
 
+- `AdditiveArithmetic` is the protocol that allows any numeric type that conforms to it to be added or subtracted. If a sequence conforms this protocol, `sum()` method can be applied.
 
+- `Numeric` protocol inherits from `AdditiveArithmetic` and adds up multiplication of scalar values and a `magnitude`. Magnitude is the value itself.
 
+- `SignedNumeric` extends the `Numeric` with `negate` function that replaces the value with it's additive inverse and the subtraction ability.
+
+- `Strideable` represents values that can be offset and measured. This allows to literally stride through some range of values.
+
+## Integer Protocols
+
+`BinaryInteger` is the basis to all integer types in the `stdlib` providing basic functionality such as:
+
+- initialisation via converson, clamping, providing the exact value or by bit pattern
+- comparing across integer types
+- perform multiple calculations: arithmetic, bitwise, shifting
+- working with binary representation
+- finding sign and magnitude
+
+`FixedWidthInteger` protocol adds binary bitwise operations, bit shifts and overflow handling to `BinaryInteger`.
+
+`SignedInteger` adds the ability to represent negative values.
+
+`UnsignedInteger` adds the ability to represent only nonnegative values.
 
 ## 4.9. Strings And Text
 
