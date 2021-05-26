@@ -188,6 +188,17 @@ All needed is just to duplicate the MSB P times and we get the value same as bef
 
 In computer architecture word is the smallest addressible unit of data, that can be any number of bits in length.
 
+## Bridging Swift with ObjC
+
+Reference: [Совместимый с «Objective-C» «Swift»-код](https://habr.com/ru/post/345946/)
+
+When mapping Swift code with ObjC neighbour code it is handy to use the following construct:
+
+```swift
+@objc(getCharacters:range:) // this is the objc-method that will be mapped
+func getCharacters(_ buffer: UnsafeMutablePointer<UInt16>, range aRange: _SwiftNSRange)
+```
+
 # 4. Numbers and Basic Values
 
 ## 4.1. Logical Values / Bool
@@ -1023,6 +1034,32 @@ These protocols give the common operation that can be performed on scalar values
 `UnsignedInteger` adds the ability to represent only nonnegative values.
 
 ## 4.9. Strings And Text
+
+### Strings and Characters / String
+
+String is a collection of `Character` instances. 
+It bridges with ObjC's `NSString` via private `_StringSelectorHolder` protocol. There ObjC methods are mapped with Swift ones.
+
+### Ways to create a string
+
+- literal – `let name = "Dima"`
+- interpolation – `"Hello, \(name)! :)"`
+- various initializer methods: from `Char`, `String`, `Sequence`, `Substring`, etc
+
+### Modifying adn Comparing Strings
+
+Strings have value semantics aka CoW (copy-on-write):
+
+```swift
+let name = "Dima"
+let fullName = name // "Dima"
+fullName += " Sexy" // "Dima Sexy"
+name // "Dima"
+```
+
+Strings can be compared (under the hood it comes with the Unicode representation – via Unicode Scalar Value). This is not locale sensitive.
+
+### Strings and Characters / Character
 
 ### 4.9.1. Strings and Characters / String
 
