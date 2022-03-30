@@ -11,7 +11,13 @@ import XCTest
 
 class WeakClassTests: XCTestCase {
 
-	func testObjectsAreNilAfterLocalScope() throws {
+	// MARK: - SUT
+
+	var sut: WeakifiedClass<Foo>!
+
+	
+
+	func testObjectsAreNilAfterLocalScope() {
 
 		// Arrange
 
@@ -19,8 +25,8 @@ class WeakClassTests: XCTestCase {
 
 		// Act
 
-		for _ in 0...10 {
-			let foo = Foo()
+		for i in 0...10 {
+			let foo = Foo(i)
 			let container = WeakifiedClass<Foo>(withRefType: foo)
 			weakPointersArray.append(container)
 		}
@@ -31,12 +37,23 @@ class WeakClassTests: XCTestCase {
 			XCTAssertNil($0.object)
 		}
 	}
+
+	func testWeakRefIsNilAfterStrongRemoval() {
+
+		// Arrange
+
+		let wrapper = WeakifiedClass<Foo>.init(withRefType: Foo(0))
+
+		var objectRef = wrapper.object
+
+		weak var objectWeakRef = objectRef
+
+		// Act
+
+		objectRef = nil
+
+		// Assert
+
+		XCTAssertNil(objectWeakRef)
+	}
 }
-
-extension WeakClassTests {
-
-	class Foo { }
-
-	struct Boo { }
-}
-
