@@ -7,43 +7,47 @@
 
 import XCTest
 
-@testable import WeakifiedContainers
 
+/// Testing `NSHashTable` weak options
 class WeakTableTests: XCTestCase {
 
-	// MARK: - SUT
+	/// https://www.swiftbysundell.com/articles/avoiding-force-unwrapping-in-swift-unit-tests/
+	/// https://stackoverflow.com/questions/24127587/how-do-i-declare-an-array-of-weak-references-in-swift
+	/// 	@propertyWrapper
+	/// 		viewController test
+	/// 		NSPointerArray
+	///
+
+	// MARK: SUT
 
 	var sut: NSHashTable<Foo>!
 
-	// MARK: - SUT Lifecycle
+	// MARK: Properties
 
-	override func setUpWithError() throws {
-		do {
-			try super.setUpWithError()
-			sut = NSHashTable<Foo>.weakObjects()
-		} catch let error as NSError {
-			print(error.userInfo)
-			XCTFail("Failed to setup SUT")
-		}
+	var foo: Foo?
+
+	// MARK: SUT Lifecycle
+
+	override func setUp() {
+		super.setUp()
+
+		sut = NSHashTable<Foo>.weakObjects()
+		foo = Foo(1)
+
 	}
 
-	override func tearDownWithError() throws {
-		do {
-			sut = nil
-			try super.tearDownWithError()
-		} catch let error as NSError {
-			print(error.userInfo)
-			XCTFail("Failed to setup SUT")
-		}
+	override func tearDown() {
+		sut = nil
+		foo = nil
+
+		super.tearDown()
 	}
 
-	// MARK: - Tests
+	// MARK: Tests
 
 	func testWeakifiedTable() {
 
 		// Arrange
-
-		var foo: Foo? = Foo(1)
 
 		// Act
 
@@ -54,7 +58,6 @@ class WeakTableTests: XCTestCase {
 		// Assert
 
 		XCTAssertEqual(sut.allObjects.count, 0)
-
 	}
 
 	func testWeakifiedTableWithArray() {
@@ -72,11 +75,9 @@ class WeakTableTests: XCTestCase {
 		fooArray = nil
 
 		// Assert
-
+		
 		XCTAssertEqual(sut.allObjects.count, 0)
 	}
-
-
 }
 
 // MARK: - Convenience

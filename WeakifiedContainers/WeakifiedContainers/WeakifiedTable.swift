@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// Stores weak references in a hash-table fashioned manner
 class WeakifiedTable<T: AnyObject> {
 

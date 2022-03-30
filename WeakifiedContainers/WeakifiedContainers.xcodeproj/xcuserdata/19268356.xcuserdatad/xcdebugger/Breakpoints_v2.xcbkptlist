@@ -14,8 +14,8 @@
             filePath = "WeakifiedContainersTests/NSHashTableWeakTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
             landmarkName = "testWeakifiedTableWithArray()"
             landmarkType = "7">
             <Locations>
@@ -49,7 +49,38 @@
                   endingLineNumber = "76"
                   offsetFromSymbolStart = "704">
                </Location>
+               <Location
+                  uuid = "D05D1A80-0255-4558-964D-B936E8E1271C - e6cd68642312f8f0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WeakifiedContainersTests.WeakTableTests.testWeakifiedTableWithArray() -&gt; ()"
+                  moduleName = "WeakifiedContainersTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/19268356/Documents/GitHub/TCS/WeakifiedContainers/WeakifiedContainersTests/NSHashTableWeakTests.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "74"
+                  endingLineNumber = "74"
+                  offsetFromSymbolStart = "767">
+               </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73651A17-6E3B-4AF8-AF6D-88E691A0BA50"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WeakifiedContainersTests/FunctionalWeakifiedTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "testExample()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

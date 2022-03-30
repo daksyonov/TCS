@@ -7,15 +7,13 @@
 
 import XCTest
 
-@testable import WeakifiedContainers
-
 class WeakClassTests: XCTestCase {
 
-	// MARK: - SUT
+	// MARK: SUT
 
 	var sut: WeakifiedClass<Foo>!
 
-	
+	// MARK: Tests
 
 	func testObjectsAreNilAfterLocalScope() {
 

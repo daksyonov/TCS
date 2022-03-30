@@ -10,6 +10,10 @@
 		3F2C134527EFD75A002858D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2C134427EFD75A002858D7 /* AppDelegate.swift */; };
 		3F2C137527EFD7C8002858D7 /* WeakifiedClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2C137427EFD7C8002858D7 /* WeakifiedClass.swift */; };
 		3F2C138427EFDEFE002858D7 /* WeakClassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2C138327EFDEFE002858D7 /* WeakClassTests.swift */; };
+		90569FAA27F4ADD500AC725B /* FunctionalWeakifiedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90569FA927F4ADD500AC725B /* FunctionalWeakifiedTests.swift */; };
+		90569FAB27F4AEB600AC725B /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C96F327F44AE800456291 /* Foo.swift */; };
+		90569FAC27F4AEBA00AC725B /* WeakifiedClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2C137427EFD7C8002858D7 /* WeakifiedClass.swift */; };
+		90569FAD27F4AEBA00AC725B /* WeakifiedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C96F727F4608400456291 /* WeakifiedTable.swift */; };
 		906C96F427F44AE800456291 /* Foo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C96F327F44AE800456291 /* Foo.swift */; };
 		906C96F627F44BE300456291 /* NSHashTableWeakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C96F527F44BE300456291 /* NSHashTableWeakTests.swift */; };
 		906C96F827F4608400456291 /* WeakifiedTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C96F727F4608400456291 /* WeakifiedTable.swift */; };
@@ -33,6 +37,7 @@
 		3F2C137A27EFDEB8002858D7 /* WeakifiedContainersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeakifiedContainersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F2C138327EFDEFE002858D7 /* WeakClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakClassTests.swift; sourceTree = "<group>"; };
 		90569FA727F4AB1000AC725B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		90569FA927F4ADD500AC725B /* FunctionalWeakifiedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalWeakifiedTests.swift; sourceTree = "<group>"; };
 		906C96F327F44AE800456291 /* Foo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Foo.swift; sourceTree = "<group>"; };
 		906C96F527F44BE300456291 /* NSHashTableWeakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSHashTableWeakTests.swift; sourceTree = "<group>"; };
 		906C96F727F4608400456291 /* WeakifiedTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakifiedTable.swift; sourceTree = "<group>"; };
@@ -78,11 +83,11 @@
 		3F2C134327EFD75A002858D7 /* WeakifiedContainers */ = {
 			isa = PBXGroup;
 			children = (
+				3F2C135227EFD75D002858D7 /* Info.plist */,
 				3F2C134427EFD75A002858D7 /* AppDelegate.swift */,
+				906C96F327F44AE800456291 /* Foo.swift */,
 				3F2C137427EFD7C8002858D7 /* WeakifiedClass.swift */,
 				906C96F727F4608400456291 /* WeakifiedTable.swift */,
-				906C96F327F44AE800456291 /* Foo.swift */,
-				3F2C135227EFD75D002858D7 /* Info.plist */,
 			);
 			path = WeakifiedContainers;
 			sourceTree = "<group>";
@@ -90,8 +95,9 @@
 		3F2C137B27EFDEB8002858D7 /* WeakifiedContainersTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F2C138327EFDEFE002858D7 /* WeakClassTests.swift */,
+				90569FA927F4ADD500AC725B /* FunctionalWeakifiedTests.swift */,
 				906C96F527F44BE300456291 /* NSHashTableWeakTests.swift */,
+				3F2C138327EFDEFE002858D7 /* WeakClassTests.swift */,
 			);
 			path = WeakifiedContainersTests;
 			sourceTree = "<group>";
@@ -206,6 +212,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90569FAD27F4AEBA00AC725B /* WeakifiedTable.swift in Sources */,
+				90569FAB27F4AEB600AC725B /* Foo.swift in Sources */,
+				90569FAC27F4AEBA00AC725B /* WeakifiedClass.swift in Sources */,
+				90569FAA27F4ADD500AC725B /* FunctionalWeakifiedTests.swift in Sources */,
 				3F2C138427EFDEFE002858D7 /* WeakClassTests.swift in Sources */,
 				906C96F627F44BE300456291 /* NSHashTableWeakTests.swift in Sources */,
 			);
