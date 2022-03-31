@@ -9,7 +9,7 @@ import XCTest
 
 
 /// Testing `NSHashTable` weak options
-class WeakTableTests: XCTestCase {
+final class WeakTableTests: XCTestCase {
 
 	/// https://www.swiftbysundell.com/articles/avoiding-force-unwrapping-in-swift-unit-tests/
 	/// https://stackoverflow.com/questions/24127587/how-do-i-declare-an-array-of-weak-references-in-swift

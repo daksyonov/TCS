@@ -5,7 +5,7 @@
 //  Created by Аксёнов Дмитрий Александрович on 30.03.2022.
 //
 
-class Foo {
+final class Foo {
 
 	// Just some vars to occupy memory
 

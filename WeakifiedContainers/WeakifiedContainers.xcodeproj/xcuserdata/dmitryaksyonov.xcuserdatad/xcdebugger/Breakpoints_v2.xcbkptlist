@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "AABB3187-72A0-4338-A959-07460F3D2F95"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "08011AE8-37E7-4458-A44B-761BBCDC16C6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WeakifiedContainers/PropertyWrapperWeakContainer.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "WeakObject"
+            landmarkType = "14">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C12B6B8F-7191-48D6-8407-70FF498014D1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WeakifiedContainersTests/WeakPointerArrayTest.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "testPointersArray()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C12B6B8F-7191-48D6-8407-70FF498014D1 - 8de5e24dd6383232"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIView) -&gt; () in WeakifiedContainersTests.WeakPointerArrayTest.testPointersArray() -&gt; ()"
+                  moduleName = "WeakifiedContainersTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryaksyonov/Documents/GitHub/TCS/WeakifiedContainers/WeakifiedContainersTests/WeakPointerArrayTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "C12B6B8F-7191-48D6-8407-70FF498014D1 - aefe74af15c5e889"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WeakifiedContainersTests.WeakPointerArrayTest.testPointersArray() -&gt; ()"
+                  moduleName = "WeakifiedContainersTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryaksyonov/Documents/GitHub/TCS/WeakifiedContainers/WeakifiedContainersTests/WeakPointerArrayTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "1443">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

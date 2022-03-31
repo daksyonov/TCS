@@ -7,7 +7,7 @@
 
 import XCTest
 
-class WeakClassTests: XCTestCase {
+final class WeakClassTests: XCTestCase {
 
 	// MARK: SUT
 

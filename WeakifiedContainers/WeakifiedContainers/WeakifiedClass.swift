@@ -5,7 +5,7 @@
 //  Created by Dmitry Aksyonov on 27.03.2022.
 //
 
-class WeakifiedClass<T: AnyObject> {
+final class WeakifiedClass<T: AnyObject> {
 
 	weak var object: T?
 

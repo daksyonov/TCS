@@ -7,3 +7,4 @@
 **Test Subjects:**
 - `class`-type wrapper (see `WeakClassTests.swift`)
 - `NSHashTable` (see `NSHashTableWeakTests.swift`)
+- `@propertyWrapper`

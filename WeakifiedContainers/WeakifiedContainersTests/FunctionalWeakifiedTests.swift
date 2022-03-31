@@ -9,7 +9,7 @@ import XCTest
 
 
 /// Testing functional approach to weakified containing
-class FunctionalWeakifiedTests: XCTestCase {
+final class FunctionalWeakifiedTests: XCTestCase {
 
 	// MARK: SUT
 
