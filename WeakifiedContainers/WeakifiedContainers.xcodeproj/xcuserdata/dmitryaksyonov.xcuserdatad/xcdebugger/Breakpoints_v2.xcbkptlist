@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "9B00E724-FA8C-445D-95DA-16538F446947"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99AA4D37-8BD2-4144-94EA-DCF20FA2ACEF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WeakifiedContainersTests/WeakClassTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "testObjectsAreNilAfterLocalScope()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "99AA4D37-8BD2-4144-94EA-DCF20FA2ACEF - 48be77caed76ef45"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WeakifiedContainersTests.WeakClassTests.testObjectsAreNilAfterExitingLocalScope() throws -&gt; ()"
+                  moduleName = "WeakifiedContainersTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryaksyonov/Desktop/TCS/WeakifiedContainers/WeakifiedContainersTests/WeakClassTests.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "316">
+               </Location>
+               <Location
+                  uuid = "99AA4D37-8BD2-4144-94EA-DCF20FA2ACEF - 48be77caed76ef45"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WeakifiedContainersTests.WeakClassTests.testObjectsAreNilAfterExitingLocalScope() throws -&gt; ()"
+                  moduleName = "WeakifiedContainersTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dmitryaksyonov/Desktop/TCS/WeakifiedContainers/WeakifiedContainersTests/WeakClassTests.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "566">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
