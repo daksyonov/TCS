@@ -1,0 +1,3 @@
+[submodule "WeakifiedContainers"]
+	path = WeakifiedContainers
+	url = https://github.com/frozenstruct/WeakifiedContainers.git
