@@ -1,3 +1,6 @@
 [submodule "WeakifiedContainers"]
 	path = WeakifiedContainers
 	url = https://github.com/frozenstruct/WeakifiedContainers.git
+[submodule "OptionalReIMP"]
+	path = OptionalReIMP
+	url = git@github.com:frozenstruct/OptionalReIMP.git
