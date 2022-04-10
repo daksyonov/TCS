@@ -4,3 +4,6 @@
 [submodule "OptionalReIMP"]
 	path = OptionalReIMP
 	url = git@github.com:frozenstruct/OptionalReIMP.git
+[submodule "SOLID"]
+	path = SOLID
+	url = git@github.com:frozenstruct/SOLID.git
